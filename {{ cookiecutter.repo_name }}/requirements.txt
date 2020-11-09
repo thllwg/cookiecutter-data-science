@@ -11,8 +11,3 @@ python-dotenv>=0.5.1
 {% if cookiecutter.use_data_version_control == 'y' %}
 dvc[s3]
 {% endif %}
-{% if cookiecutter.python_interpreter != 'python3' %}
-
-# backwards compatibility
-pathlib2
-{% endif %}
