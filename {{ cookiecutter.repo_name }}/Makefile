@@ -21,8 +21,7 @@ endif
 
 ## Install Python Dependencies
 requirements: test_environment
-	python -m pip install -U pip setuptools wheel
-	python -m pip install -r requirements.txt
+	pipenv install --dev
 
 {% if cookiecutter.use_data_version_control == 'y' %}
 .dvc: requirements
@@ -86,17 +85,14 @@ endif
 
 ## Set up python interpreter environment
 create_environment:
-ifeq (True,$(HAS_CONDA))
-	@echo ">>> Detected conda, creating conda environment."
-	conda create --name $(PROJECT_NAME) python=3
-	@echo ">>> New conda env created. Activate with:\nsource activate $(PROJECT_NAME)"
-else
-	python -m pip install -q virtualenv virtualenvwrapper
-	@echo ">>> Installing virtualenvwrapper if not already installed.\nMake sure the following lines are in shell startup file\n\
-	export WORKON_HOME=$$HOME/.virtualenvs\nexport PROJECT_HOME=$$HOME/Devel\nsource /usr/local/bin/virtualenvwrapper.sh\n"
-	@bash -c "source `which virtualenvwrapper.sh`;mkvirtualenv $(PROJECT_NAME) --python=python3"
-	@echo ">>> New virtualenv created. Activate with:\nworkon $(PROJECT_NAME)"
-endif
+	python -m pip install -q pipenv
+	@echo ">>> Installing Pipenv if not already installed."
+	pipenv install --dev
+	@echo ">>> Pipenv environment created"
+
+activate_environment:
+	pipenv shell
+	@echo ">>> Pipenv environment activated"
 
 ## Test python environment is setup correctly
 test_environment:
